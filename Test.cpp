@@ -67,13 +67,39 @@ TEST_CASE("Are the methods pass successfully?"){
 
 }
 
-TEST_CASE("Doesn't let play after game finished"){
+TEST_CASE("Tried to play after game finished"){
     Player p1("ron");
     Player p2("shuster");
     Game game(p1,p2);
     game.playAll();
     CHECK_THROWS(game.playTurn());
 }
+
+TEST_CASE("Same player on current game."){
+    Player p1("shuster");
+    CHECK_THROWS(Game(p1,p1));
+}
+
+TEST_CASE("Same player on different games at the same time."){
+    Player p1("ron");
+    Player p2("shuster");
+    Player p3("Bob");
+    Game game1(p1,p2);
+    CHECK_THROWS(Game(p3,p1));
+    
+}
+
+TEST_CASE("Same player on different games after finish."){
+    Player p1("ron");
+    Player p2("shuster");
+    Game game1(p1,p2);
+    game1.playAll();
+    CHECK_NOTHROW(Game(p1,p2));
+
+}
+
+
+
 
 
 
