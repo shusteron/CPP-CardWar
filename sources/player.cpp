@@ -34,21 +34,29 @@ void Player::cardsWon(Card card1, Card card2){
 
 }
 
-void Player::cardsWon(Card card){
+void Player::drawCase(Card card){
     this->cards_won.push_back(card);
 }
 
-Card Player::getCard(){
+Card& Player::getCard(){
     if(this->stacksize()>0){
-        return this->deck.pop_back();
+        Card& card=this->deck.back();
+        this->deck.pop_back();
+        return card;
     }
     throw "Deck is empty.";
 }
 
-Card Player::peek(){
+int Player::peek(){
+    if(this->stacksize()){
+        return this->deck.back().getValue();
+    }
+    throw "Deck is empty.";
+}
+Card Player::back(){
     if(this->stacksize()){
         return this->deck.back();
     }
-    throw "Deck is empty."
+    throw "Deck is empty.";
 }
 

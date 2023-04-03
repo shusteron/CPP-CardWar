@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 
+#define ACE=1;
 
 namespace ariel{}
 using namespace std;
@@ -11,6 +12,7 @@ using namespace std;
 Game::Game(Player &p1, Player &p2){
     this->p1=&p1;
     this->p2=&p2;
+    this->summary="";
     for(int i=0;i<53;i++){
         this->cards[i].setShape("");
         this->cards[i].setValue(0);
@@ -82,16 +84,34 @@ void Game::printDeck(){
         cout << to_string(this->cards[i].getValue()) + " of " + this->cards[i].getShape()<<endl;
     }
 }
+string Game::getTurn(string name, Card card){
+    return name + " played " + to_string(card.getValue()) + " of " + card.getShape()+".";
+
+}
 void Game::playTurn(){
-    if(this->p1->peek() > this->p2->peek()){
-        this->p1->cardsWon(this->p1->getCard(), this->p2->getCard());
+
+    if(this->p1->peek() > this->p2->peek() && this->p2->peek()!=ACE){
+        
+        Card& a = this->p1->getCard();
+        Card& b = this->p2->getCard();
+        this->p1->cardsWon(a, b);
+        this->summary+= this->getTurn(this->p1->getName(),a)+
+                        this->getTurn(this->p2->getName(),b)+
+                        this->p1->getName() + " won.\n";
     }
-    else if (this->p1->peek() < this->p2->peek())
+    else if (this->p1->peek() < this->p2->peek() && this->p2->peek()!=2)
     {
-        this->p2->cardsWon(this->p2->getCard(), this->p1->getCard());
+        
+        Card& a = this->p1->getCard();
+        Card& b = this->p2->getCard();
+        this->p2->cardsWon(a, b);
+        this->summary+= this->getTurn(this->p1->getName(),a)+
+                        this->getTurn(this->p2->getName(),b)+
+                        this->p2->getName() + " won.\n";
     }
     // In case of draw.
     else{
+        this->summary+=" Draw. ";
         bool draw_winner=false;
         vector<Card> alice; // Stands for p1 stack.
         vector<Card> bob;   // Stands for p2 stack.
@@ -102,22 +122,37 @@ void Game::playTurn(){
             bob.push_back(this->p2->getCard());
             bob.push_back(this->p2->getCard());
             bob.push_back(this->p2->getCard());
-            if(alice.back()>bob.back()){
+            if(alice.back().getValue()>bob.back().getValue()){
+                this->summary+= this->getTurn(this->p1->getName(),a)+
+                        this->getTurn(this->p2->getName(),b)+
+                        this->p1->getName() + " won.\n";
                 draw_winner=true;
                 while(alice.size()>0){
-                    this->p1->cardsWon(alice.pop_back(),bob.pop_back());
+                    this->p1->cardsWon(alice.back(),bob.back());
+                    alice.pop_back();
+                    bob.pop_back();
                 }
             }
-            else if(alice.back()<bob.back()){
+            else if(alice.back().getValue()<bob.back().getValue()){
                 draw_winner=true;
                 while(alice.size()>0){
-                    this->p2->cardsWon(bob.pop_back(),alice.pop_back());
+                    this->p2->cardsWon(bob.back(),alice.back());
+                    alice.pop_back();
+                    bob.pop_back();
                 }
             }
             else{
                 continue;
             }
             
+        }
+        if(draw_winner==false){
+            while(alice.size()>0){
+                this->p1->drawCase(alice.back());
+                this->p2->drawCase(bob.back());
+                alice.pop_back();
+                bob.pop_back();
+            }
         }
     }
         
@@ -126,7 +161,9 @@ void Game::playTurn(){
 }
 
 void Game::playAll(){}
-void Game::printLastTurn(){}
+void Game::printLastTurn(){
+    cout<< this->summary<<endl;
+}
 void Game::printLog(){}
 void Game::printStats(){}
 void Game::printWiner(){}

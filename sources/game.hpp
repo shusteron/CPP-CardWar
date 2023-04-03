@@ -12,10 +12,12 @@ class Game{
     Player* p1;
     Player* p2;
     Card cards[53];
+    string summary;
     void shuffle();
     void createDeck();
     void printDeck();
     void splitDecks();
+    string getTurn(string name, Card card);
 
     
 

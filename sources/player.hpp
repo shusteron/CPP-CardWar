@@ -21,11 +21,12 @@ class Player{
         int stacksize();
         int cardesTaken();
         void addCard(Card card);
-        Card getCard();
-        Card peek();
+        Card& getCard();
+        int peek();
         void cardsWon(Card card1,Card card2);
-        void cardsWon(Card card);
+        void drawCase(Card card);
         string getName();
+        Card back();
 
 };
 #endif
