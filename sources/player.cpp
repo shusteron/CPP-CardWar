@@ -9,7 +9,7 @@ using namespace ariel;
 Player:: Player(string name){
     this->name = name;
     this->deck={};
-    this->cards_won={};
+    this->won=0;
 }
 
 int Player::stacksize(){
@@ -17,7 +17,7 @@ int Player::stacksize(){
 }
 
 int Player::cardesTaken(){
-    return this->cards_won.size();
+    return this->won;
 }
 
 string Player::getName(){
@@ -28,15 +28,13 @@ void Player::addCard(Card card){
     this->deck.push_back(card);
 }
 
-void Player::cardsWon(Card card1, Card card2){
-    this->cards_won.push_back(card1);
-    this->cards_won.push_back(card2);
-
+void Player::cardsWon(){
+    this->won+=2;
 }
 
-void Player::drawCase(Card card){
-    this->cards_won.push_back(card);
-}
+// void Player::drawCase(Card card){
+//     this->cards_won.push_back(card);
+// }
 
 Card& Player::getCard(){
     if(this->stacksize()>0){

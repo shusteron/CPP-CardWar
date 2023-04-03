@@ -13,6 +13,7 @@ class Game{
     Player* p2;
     Card cards[53];
     string summary;
+    string last_turn;
     void shuffle();
     void createDeck();
     void printDeck();

@@ -12,7 +12,7 @@ class Player{
     private:
     string name;
     vector<Card> deck;
-    vector<Card> cards_won;
+    int won;
     
     
     public:
@@ -23,7 +23,7 @@ class Player{
         void addCard(Card card);
         Card& getCard();
         int peek();
-        void cardsWon(Card card1,Card card2);
+        void cardsWon();
         void drawCase(Card card);
         string getName();
         Card back();
